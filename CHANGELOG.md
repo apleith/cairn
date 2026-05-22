@@ -8,12 +8,25 @@ expected.
 
 ## [Unreleased]
 
+### Unreleased changes since v0.1.0
+
+- **Alembic migration scaffolding.** `alembic/` directory with `env.py`
+  wired to `config.yaml`'s `storage.sqlite_path`, baseline revision
+  `27e91b6ca1e5` (no-op, stamps the legacy `submissions` + `hc_*` tables
+  as the starting point), and revision `2bd36a46271f` creating the five
+  Cairn v1 fact tables: `daily_observations`, `body_measurements`,
+  `medication_events`, `clinical_events`, `model_outputs`. The new
+  tables sit alongside the legacy tables; nothing is dropped or rewritten
+  yet. Standard `alembic upgrade head` applies.
+- `alembic>=1.13` added to `requirements.txt`.
+
 ### Planned for v0.2
 
-- Migrate the schema to the five-table fact-table data architecture
-  (`daily_observations`, `body_measurements`, `medication_events`,
-  `clinical_events`, `model_outputs`) described in the project brief.
-- Port a segmented projection model with clinically plausible envelopes.
+- `scripts/migrate_v0_to_v1.py` to backfill `daily_observations` from
+  the existing `submissions` table (weight, BP, daily-health entries).
+- Manual-entry routes and PWA forms for `body_measurements`,
+  `medication_events`, and `clinical_events`.
+- Segmented projection model with clinically plausible envelopes.
 - Replace the remaining hardcoded paths in `src/food_log_writer.py` and
   `templates/today.html` with configurable values.
 - First-party authentication for the Flask app (so Cairn is safe outside
