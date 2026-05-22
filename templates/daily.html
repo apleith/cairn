@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% block title %}Today's health log — life-os{% endblock %}
+{% block content %}
+<h1>Today's health log</h1>
+<p class="muted">{{ today }}. All fields optional — leave blank to skip.</p>
+
+<form method="post" autocomplete="off">
+
+  <fieldset>
+    <legend>Pills</legend>
+    <label class="inline">
+      <span>{{ pill_labels.wake if pill_labels else "Wake meds (empty stomach)" }}</span>
+      <select name="wake">
+        <option value="">—</option>
+        <option value="Y">Y</option>
+        <option value="N">N</option>
+      </select>
+    </label>
+    <label class="inline">
+      <span>{{ pill_labels.breakfast if pill_labels else "Breakfast meds" }}</span>
+      <select name="breakfast">
+        <option value="">—</option>
+        <option value="Y">Y</option>
+        <option value="N">N</option>
+      </select>
+    </label>
+    <label class="inline">
+      <span>{{ pill_labels.lunch if pill_labels else "Lunch meds" }}</span>
+      <select name="lunch">
+        <option value="">—</option>
+        <option value="Y">Y</option>
+        <option value="N">N</option>
+      </select>
+    </label>
+    <label class="inline">
+      <span>{{ pill_labels.bedtime if pill_labels else "Bedtime meds" }}</span>
+      <select name="bedtime">
+        <option value="">—</option>
+        <option value="Y">Y</option>
+        <option value="N">N</option>
+      </select>
+    </label>
+  </fieldset>
+
+  <fieldset>
+    <legend>Body (cuff + scale)</legend>
+    <label for="weight">Weight (lb)</label>
+    <input type="number" step="0.1" name="weight" id="weight" inputmode="decimal">
+
+    <div class="row3">
+      <div>
+        <label for="bp_sys">BP — systolic</label>
+        <input type="number" name="bp_sys" id="bp_sys" inputmode="numeric" placeholder="134">
+      </div>
+      <div>
+        <label for="bp_dia">diastolic</label>
+        <input type="number" name="bp_dia" id="bp_dia" inputmode="numeric" placeholder="86">
+      </div>
+      <div>
+        <label for="bp_pulse">pulse</label>
+        <input type="number" name="bp_pulse" id="bp_pulse" inputmode="numeric" placeholder="72">
+      </div>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Wearable (Galaxy Fit 3)</legend>
+    <div class="row3">
+      <div>
+        <label for="sleep_h">Sleep — hr</label>
+        <input type="number" name="sleep_h" id="sleep_h" inputmode="numeric" min="0" max="14" placeholder="6">
+      </div>
+      <div>
+        <label for="sleep_m">min</label>
+        <input type="number" name="sleep_m" id="sleep_m" inputmode="numeric" min="0" max="59" placeholder="30">
+      </div>
+      <div>
+        <label for="sleep_score">score /100</label>
+        <input type="number" name="sleep_score" id="sleep_score" inputmode="numeric" min="0" max="100" placeholder="72">
+      </div>
+    </div>
+
+    <div class="row3">
+      <div>
+        <label for="resting_hr">Resting HR</label>
+        <input type="number" name="resting_hr" id="resting_hr" inputmode="numeric" placeholder="64">
+      </div>
+      <div>
+        <label for="spo2_low">SpO2 low %</label>
+        <input type="number" name="spo2_low" id="spo2_low" inputmode="numeric" min="80" max="100" placeholder="92">
+      </div>
+      <div>
+        <label for="steps_prev">Steps (yesterday)</label>
+        <input type="number" name="steps_prev" id="steps_prev" inputmode="numeric" placeholder="4820">
+      </div>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Body checks</legend>
+    <label class="inline">
+      <span>BM (bowel movement today)</span>
+      <select name="bm">
+        <option value="">—</option>
+        <option value="Y">Y</option>
+        <option value="N">N</option>
+      </select>
+    </label>
+    <label class="inline">
+      <span>Edema (ankle swelling today)</span>
+      <select name="edema">
+        <option value="">—</option>
+        <option value="Y">Y</option>
+        <option value="N">N</option>
+      </select>
+    </label>
+  </fieldset>
+
+  <fieldset>
+    <legend>Note (optional, one sentence)</legend>
+    <input type="text" name="note" id="note" maxlength="200" placeholder="symptom, trigger, or win">
+  </fieldset>
+
+  <button type="submit">Log</button>
+</form>
+{% endblock %}

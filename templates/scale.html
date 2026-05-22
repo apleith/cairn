@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}{{ scale.name }} — life-os-bridge{% endblock %}
+{% block content %}
+<h1>{{ scale.name }}</h1>
+<p class="muted">{{ scale.full_name }}</p>
+<p>{{ scale.prompt }}</p>
+
+<form method="post">
+  {% for item in scale["items"] %}
+  {% set item_index = loop.index0 %}
+  <fieldset>
+    <legend>{{ loop.index }}. {{ item }}</legend>
+    {% for opt in scale.response_scale %}
+    <label class="radio">
+      <input type="radio" name="q{{ item_index }}" value="{{ opt.value }}" required>
+      <span>{{ opt.label }}</span>
+    </label>
+    {% endfor %}
+  </fieldset>
+  {% endfor %}
+  <button type="submit">Submit</button>
+</form>
+{% endblock %}

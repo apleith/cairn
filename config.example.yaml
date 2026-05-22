@@ -1,0 +1,108 @@
+# Cairn configuration. Copy this file to config.yaml and fill in your values.
+# config.yaml is gitignored so your personal values do not get pushed.
+
+app:
+  host: 0.0.0.0
+  port: 5151
+  # Reach Cairn from your phone via Tailscale (or another private mesh).
+  # Set this to http://<your-tailscale-hostname>:5151 once you have one.
+  public_url: http://localhost:5151
+  timezone: America/Chicago
+
+# ntfy push notifications (optional). Pick a long, hard-to-guess topic
+# name — the topic IS the auth on the public ntfy.sh server.
+ntfy:
+  topic: change-me-to-a-secret-topic-name
+  priority: default
+
+# Notifications are suppressed inside this window.
+quiet_hours:
+  start: "22:00"
+  end: "07:00"
+
+# Where Cairn writes plain-text markdown logs. These can live anywhere on
+# your filesystem (your Obsidian vault, Documents, a Dropbox folder, etc.).
+# data.db sits in the project directory unless you override sqlite_path.
+storage:
+  sqlite_path: data.db
+  health_log_path: ./data/health-log.md
+  mental_health_log_path: ./data/mental-health-log.md
+
+# Validated mental-health screening instruments. Cadence_days controls how
+# often Cairn prompts; prompt_on names the weekday it offers the screen.
+# Leave the list empty to disable screenings entirely.
+scales:
+  enabled:
+    - id: phq9
+      cadence_days: 14
+      prompt_on: [Sunday]
+    - id: gad7
+      cadence_days: 14
+      prompt_on: [Sunday]
+      offset_days: 7
+    - id: who5
+      cadence_days: 7
+      prompt_on: [Sunday]
+    - id: isi
+      cadence_days: 30
+      prompt_on: [Sunday]
+
+# Activity nudges pull from a markdown library of micro-activities.
+activities:
+  path: ./data/activities.md
+  min_free_minutes: 30
+  max_prompts_per_day: 3
+
+# Daily weigh-in prompt time.
+weight:
+  prompt_time: "08:00"
+
+# Optional medication labels rendered on the /daily form. Customize to your
+# regimen. If left blank, the form shows generic placeholders.
+pill_labels:
+  wake: "Wake meds (empty stomach)"
+  breakfast: "Breakfast meds"
+  lunch: "Lunch meds"
+  bedtime: "Bedtime meds"
+
+# Calendar gate (optional). Set provider to outlook, google, or none.
+# - outlook: reads the local Outlook client via COM (Windows only)
+# - google: requires credentials.json from Google Cloud Console
+# - none: only quiet hours and busy-blocks.yaml gate notifications
+calendar:
+  provider: none
+  oauth_token_path: token.json
+  oauth_credentials_path: credentials.json
+  recurring_busy_file: busy-blocks.yaml
+  check_horizon_minutes: 15
+
+# Wearable ingest (optional). The companion Android app posts Health
+# Connect data to /wearable/bulk. Toggle record types here.
+wearable:
+  enabled_record_types:
+    - SleepSession
+    - SleepStage
+    - HeartRate
+    - RestingHeartRate
+    - HeartRateVariabilityRmssd
+    - OxygenSaturation
+    - Steps
+    - Distance
+    - FloorsClimbed
+    - ActiveCaloriesBurned
+    - TotalCaloriesBurned
+    - ExerciseSession
+    - RespiratoryRate
+    - Weight
+    - BodyFat
+    - LeanBodyMass
+    - BloodPressure
+  # First-sync backfill window (days back from "now" on initial install).
+  initial_backfill_days: 21
+
+# Optional integration with an external task system. Leave commented out
+# unless you know what you're doing. If set, the /today dashboard pulls
+# plan blocks and priority tasks from that path. Without it, /today
+# returns 404 — the rest of Cairn still works fine.
+# integrations:
+#   life_os_scripts_path: C:\path\to\your\scripts

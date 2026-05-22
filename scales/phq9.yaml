@@ -1,0 +1,36 @@
+id: phq9
+name: PHQ-9
+full_name: Patient Health Questionnaire-9
+description: Depression screening
+prompt: "Over the last 2 weeks, how often have you been bothered by any of the following problems?"
+
+response_scale:
+  - value: 0
+    label: Not at all
+  - value: 1
+    label: Several days
+  - value: 2
+    label: More than half the days
+  - value: 3
+    label: Nearly every day
+
+items:
+  - Little interest or pleasure in doing things
+  - Feeling down, depressed, or hopeless
+  - Trouble falling or staying asleep, or sleeping too much
+  - Feeling tired or having little energy
+  - Poor appetite or overeating
+  - Feeling bad about yourself — or that you are a failure or have let yourself or your family down
+  - Trouble concentrating on things, such as reading the newspaper or watching television
+  - Moving or speaking so slowly that other people could have noticed, or the opposite — being fidgety or restless and moving around a lot more than usual
+  - Thoughts that you would be better off dead, or of hurting yourself in some way
+
+scoring: sum
+bands:
+  - [0, 4, Minimal]
+  - [5, 9, Mild]
+  - [10, 14, Moderate]
+  - [15, 19, Moderately severe]
+  - [20, 27, Severe]
+
+alert_on_item_9: true

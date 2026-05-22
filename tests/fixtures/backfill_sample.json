@@ -1,0 +1,18 @@
+{
+  "records": [
+    {"record_type": "SleepSession", "hc_record_uid": "s-2026-05-09", "start_time": "2026-05-08T23:00:00", "end_time": "2026-05-09T07:00:00", "source_app": "com.samsung.health", "source_device": "Galaxy Fit 3"},
+    {"record_type": "RestingHeartRate", "hc_record_uid": "r-2026-05-09", "time": "2026-05-09T07:30:00", "bpm": 60, "source_app": "com.samsung.health", "source_device": "Galaxy Fit 3"},
+    {"record_type": "OxygenSaturation", "hc_record_uid": "o-2026-05-09", "time": "2026-05-09T03:00:00", "spo2_pct": 93.0, "source_app": "com.samsung.health", "source_device": "Galaxy Fit 3"},
+    {"record_type": "Steps", "hc_record_uid": "p-2026-05-08", "start_time": "2026-05-08T10:00:00", "end_time": "2026-05-08T11:00:00", "count": 1200, "source_app": "com.samsung.health", "source_device": "Galaxy Fit 3"},
+
+    {"record_type": "SleepSession", "hc_record_uid": "s-2026-05-10", "start_time": "2026-05-09T23:30:00", "end_time": "2026-05-10T06:30:00", "source_app": "com.samsung.health", "source_device": "Galaxy Fit 3"},
+    {"record_type": "RestingHeartRate", "hc_record_uid": "r-2026-05-10", "time": "2026-05-10T07:15:00", "bpm": 61, "source_app": "com.samsung.health", "source_device": "Galaxy Fit 3"},
+    {"record_type": "Steps", "hc_record_uid": "p-2026-05-09", "start_time": "2026-05-09T09:00:00", "end_time": "2026-05-09T20:00:00", "count": 305, "source_app": "com.samsung.health", "source_device": "Galaxy Fit 3"},
+
+    {"record_type": "SleepSession", "hc_record_uid": "s-2026-05-11", "start_time": "2026-05-10T23:00:00", "end_time": "2026-05-11T07:00:00", "source_app": "com.samsung.health", "source_device": "Galaxy Fit 3"},
+    {"record_type": "RestingHeartRate", "hc_record_uid": "r-2026-05-11", "time": "2026-05-11T07:30:00", "bpm": 62, "source_app": "com.samsung.health", "source_device": "Galaxy Fit 3"},
+    {"record_type": "OxygenSaturation", "hc_record_uid": "o-2026-05-11", "time": "2026-05-11T03:30:00", "spo2_pct": 91.5, "source_app": "com.samsung.health", "source_device": "Galaxy Fit 3"},
+    {"record_type": "Steps", "hc_record_uid": "p-2026-05-10", "start_time": "2026-05-10T10:00:00", "end_time": "2026-05-10T21:00:00", "count": 4500, "source_app": "com.samsung.health", "source_device": "Galaxy Fit 3"},
+    {"record_type": "Weight", "hc_record_uid": "w-2026-05-11", "time": "2026-05-11T07:30:00", "weight_kg": 279.1, "source_app": "com.renpho.app", "source_device": "Renpho Scale"}
+  ]
+}

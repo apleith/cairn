@@ -1,0 +1,163 @@
+/*
+ * life-os-bridge styles. Colors + spacing now pull from tokens.css (the canonical
+ * brand tokens at C:\life-os\meta\design\brand\tokens.css). Surface-specific
+ * overrides for this UI live here. See brand.md for the rationale.
+ */
+
+:root {
+  /* Map the legacy local names to brand tokens so existing selectors keep working
+     while the surface gradually adopts the canonical --lo-* names directly. */
+  --bg: var(--lo-surface-dark);
+  --panel: var(--lo-surface-dark-elevated);
+  --fg: var(--lo-text-on-dark);
+  --muted: var(--lo-text-on-dark-muted);
+  --accent: var(--lo-info);
+  --border: var(--lo-border-dark);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--lo-font-sans);
+  font-size: 17px;
+  line-height: 1.5;
+}
+
+header {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--panel);
+}
+
+.home-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--lo-text-on-dark);
+  text-decoration: none;
+  font-weight: 500;
+}
+.home-link .brand-mark {
+  width: 28px;
+  height: 28px;
+  color: var(--lo-text-on-dark-muted);
+  flex: 0 0 28px;
+}
+.home-link .brand-word {
+  font-family: var(--lo-font-mono);
+  letter-spacing: 0.01em;
+}
+.home-link:hover .brand-mark { color: var(--lo-text-on-dark); }
+
+main {
+  padding: 16px;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+h1 { margin: 0 0 8px; font-size: 22px; }
+h2 { margin: 24px 0 8px; font-size: 18px; }
+.muted { color: var(--muted); font-size: 14px; }
+.band { color: var(--accent); font-weight: 600; }
+
+ul.links { list-style: none; padding: 0; }
+ul.links li { padding: 12px 0; border-bottom: 1px solid var(--border); }
+ul.links a { color: var(--accent); text-decoration: none; font-weight: 500; }
+
+form label { display: block; margin: 14px 0 6px; font-weight: 500; }
+form input[type="text"], form input[type="number"] {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  background: var(--panel);
+  color: var(--fg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+fieldset {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px;
+  margin: 12px 0;
+}
+legend { padding: 0 6px; color: var(--muted); font-size: 14px; }
+
+label.radio {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 8px;
+  border-radius: 6px;
+}
+label.radio:hover { background: var(--panel); }
+label.radio input { transform: scale(1.3); }
+
+button {
+  margin-top: 20px;
+  padding: 14px 20px;
+  font-size: 16px;
+  font-weight: 600;
+  background: var(--lo-primary);
+  color: var(--lo-text-on-dark);
+  border: 0;
+  border-radius: 8px;
+  width: 100%;
+  cursor: pointer;
+}
+button:hover { background: var(--lo-primary-hover); }
+
+/* 3-column row for grouped numeric inputs (BP triplet, sleep h/m/score, etc.) */
+.row3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+.row3 label { margin-top: 8px; font-size: 14px; }
+
+/* Inline label + select (used for pill Y/N rows) */
+label.inline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 10px 0;
+}
+label.inline span { flex: 1; }
+label.inline select {
+  flex: 0 0 80px;
+  padding: 10px;
+  font-size: 16px;
+  background: var(--panel);
+  color: var(--fg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+/* Mental-health screen cadence flags — anchored to taxonomy medical hue */
+.screen-flag {
+  background: color-mix(in srgb, var(--lo-tax-medical) 25%, transparent);
+  color: var(--lo-text-on-dark);
+  padding: 12px 14px;
+  border-left: 4px solid var(--lo-tax-medical);
+  border-radius: 4px;
+  margin: 10px 0 16px;
+  font-weight: 600;
+}
+.screen-flag-text { color: var(--lo-tax-medical); }
+a.screen-status-due, a.screen-status-never { color: var(--lo-tax-medical); }
+a.screen-status-soon { color: var(--lo-warning); }
+a.screen-status-later { color: var(--accent); }
+
+/* iOS safe-area inset for notched/home-indicator screens */
+@supports (padding: max(0px)) {
+  main {
+    padding-left: max(16px, env(safe-area-inset-left));
+    padding-right: max(16px, env(safe-area-inset-right));
+    padding-bottom: max(16px, env(safe-area-inset-bottom));
+  }
+}

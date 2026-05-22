@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>life-os</h1>
+<p class="muted">{{ today }} — {{ activities_count }} activities loaded. Quiet hours {{ quiet_hours.start }}–{{ quiet_hours.end }}.</p>
+
+<section>
+  <h2>Today</h2>
+  <ul class="links">
+    <li><a href="{{ url_for('today') }}"><strong>→ Today's plan + priority tasks + food intake</strong></a>
+      <span class="muted">single-screen dashboard</span>
+    </li>
+  </ul>
+</section>
+
+<section>
+  <h2>Quick log</h2>
+  <ul class="links">
+    <li><a href="{{ url_for('bp') }}"><strong>BP</strong></a>
+      <span class="muted">3 numbers, take after Breakfast meds</span>
+    </li>
+    <li><a href="{{ url_for('weight') }}">Weight</a>
+      {% if weight_last_display %}<span class="muted">{{ weight_last_display }}</span>{% endif %}
+    </li>
+    <li><a href="{{ url_for('daily') }}">Full daily log</a>
+      <span class="muted">pills, BP, wearable, weight, note — all optional</span>
+    </li>
+    <li><a href="/food-log/breakfast">Food log — Breakfast</a> · <a href="/food-log/lunch">Lunch</a> · <a href="/food-log/dinner">Dinner</a> · <a href="/food-log/snacks">Snacks</a></li>
+  </ul>
+</section>
+
+<section>
+  <h2>Mental health screens</h2>
+  <p class="muted">Each screen reflects the past 2 weeks — retake on a 14-day cadence.</p>
+  {% if any_screens_due %}
+  <p class="screen-flag">⚑ One or more screens are due. Take them now.</p>
+  {% endif %}
+  <ul class="links">
+    {% for s in scales %}
+    <li>
+      <a href="{{ url_for('scale', scale_id=s.id) }}" class="screen-status-{{ s.cadence.status }}">{{ s.name }}</a>
+      <span class="muted">
+        — {{ s.description }}.
+        {% if s.cadence.status == "never" %}
+          <strong class="screen-flag-text">Never taken — due now.</strong>
+        {% elif s.cadence.status == "due" %}
+          <strong class="screen-flag-text">Due now (last taken {{ s.cadence.last }}, {{ -s.cadence.days_until }} days overdue).</strong>
+        {% elif s.cadence.status == "soon" %}
+          Due in {{ s.cadence.days_until }} day{{ "s" if s.cadence.days_until != 1 else "" }} ({{ s.cadence.next_due }}). Last: {{ s.cadence.last }}.
+        {% else %}
+          Next due {{ s.cadence.next_due }} ({{ s.cadence.days_until }} days). Last: {{ s.cadence.last }}.
+        {% endif %}
+      </span>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+{% endblock %}

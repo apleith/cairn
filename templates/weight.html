@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Weight — life-os-bridge{% endblock %}
+{% block content %}
+<h1>Weight check-in</h1>
+<p class="muted">{{ today }}</p>
+<form method="post">
+  <label for="weight">Weight (lb)</label>
+  <input type="number" step="0.1" name="weight" id="weight" inputmode="decimal" autofocus required>
+
+  <label for="note">Note (optional)</label>
+  <input type="text" name="note" id="note">
+
+  <button type="submit">Log</button>
+</form>
+{% endblock %}

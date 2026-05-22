@@ -1,0 +1,74 @@
+/* life-os design tokens — CSS custom properties.
+ *
+ * Drop this file into any life-os web surface (life-os-bridge :5151, future GUIs) and
+ * reference values via var(--lo-*) rather than hard-coding hex.
+ *
+ * Source of truth lives in tokens.yaml; this file mirrors it for browser consumption.
+ * Update both files together. See brand.md for the rationale.
+ */
+
+:root {
+  /* Brand */
+  --lo-primary: #4A5568;
+  --lo-primary-hover: #5B6878;
+  --lo-accent: #00BCD4;
+
+  /* Surfaces */
+  --lo-surface-dark: #1A202C;
+  --lo-surface-dark-elevated: #252D3D;
+  --lo-surface-light: #F7FAFC;
+  --lo-surface-light-elevated: #FFFFFF;
+  --lo-border-dark: #2D3748;
+  --lo-border-light: #E2E8F0;
+
+  /* Text */
+  --lo-text-on-dark: #E2E8F0;
+  --lo-text-on-dark-muted: #A0AEC0;
+  --lo-text-on-light: #1A202C;
+  --lo-text-on-light-muted: #4A5568;
+
+  /* State (semantic, matched to taxonomy hues) */
+  --lo-success: #5B9F4C;
+  --lo-warning: #D69E2E;
+  --lo-danger: #C5314C;
+  --lo-info: #3182CE;
+
+  /* Calendar taxonomy palette, exposed here so any life-os surface can render an event
+     with the same hue Outlook + Google use. Source: meta/config/calendar-taxonomy.yaml. */
+  --lo-tax-medical: #C5314C;
+  --lo-tax-meeting: #D97706;
+  --lo-tax-research: #3182CE;
+  --lo-tax-writing: #805AD5;
+  --lo-tax-code: #9B2C2C;
+  --lo-tax-admin: #718096;
+  --lo-tax-personal-health: #319795;
+  --lo-tax-personal-household: #D69E2E;
+  --lo-tax-personal-rest: #5B9F4C;
+
+  /* Typography */
+  --lo-font-mono: 'JetBrains Mono', 'Fira Code', 'IBM Plex Mono', 'Cascadia Code', 'Source Code Pro', Consolas, 'Roboto Mono', monospace;
+  --lo-font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+
+  /* Spacing (4px base) */
+  --lo-space-2: 2px;
+  --lo-space-4: 4px;
+  --lo-space-8: 8px;
+  --lo-space-12: 12px;
+  --lo-space-16: 16px;
+  --lo-space-24: 24px;
+  --lo-space-32: 32px;
+  --lo-space-48: 48px;
+  --lo-space-64: 64px;
+
+  /* Radii */
+  --lo-radius-sm: 4px;
+  --lo-radius-md: 8px;
+  --lo-radius-lg: 12px;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* Default to dark mode in life-os surfaces unless the page opts out. */
+  :root {
+    color-scheme: dark;
+  }
+}

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}BP — life-os{% endblock %}
+{% block content %}
+<h1>Blood pressure</h1>
+<p class="muted">{{ today }}. Take after Breakfast meds. Three numbers, one tap.</p>
+
+<form method="post" autocomplete="off">
+  <div class="row3">
+    <div>
+      <label for="bp_sys">Systolic</label>
+      <input type="number" name="bp_sys" id="bp_sys" inputmode="numeric" autofocus required placeholder="134">
+    </div>
+    <div>
+      <label for="bp_dia">Diastolic</label>
+      <input type="number" name="bp_dia" id="bp_dia" inputmode="numeric" required placeholder="86">
+    </div>
+    <div>
+      <label for="bp_pulse">Pulse</label>
+      <input type="number" name="bp_pulse" id="bp_pulse" inputmode="numeric" placeholder="72">
+    </div>
+  </div>
+
+  <button type="submit">Log BP</button>
+</form>
+
+<p class="muted" style="margin-top:24px;">
+  iHealth Accu cuff Bluetooth-syncs to the iHealth MyVitals app.
+  If Health Connect picks it up, Phase B will auto-fill this — until then, tap the cuff display values in here.
+</p>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}{{ meal }} log — life-os-bridge{% endblock %}
+{% block content %}
+<h1>{{ meal }} log</h1>
+<p class="muted">{{ today }}. Enter what you ate. Quantity can be "1.5 scoops", "16 oz", "2 cups", etc. Blank rows are ignored.</p>
+
+<datalist id="product-list">
+  {% for p in products %}<option value="{{ p }}">{% endfor %}
+</datalist>
+
+<form method="post">
+  {% for i in range(4) %}
+  <fieldset style="border:1px solid #ddd; padding:0.5rem 0.75rem; margin-bottom:0.75rem;">
+    <legend>Item {{ i + 1 }}</legend>
+    <label for="item_{{ i }}">Food</label>
+    <input type="text" name="item_{{ i }}" id="item_{{ i }}" list="product-list" autocomplete="off" inputmode="text">
+    <label for="qty_{{ i }}">Quantity</label>
+    <input type="text" name="qty_{{ i }}" id="qty_{{ i }}" placeholder="e.g. 1.5 scoops" inputmode="text">
+  </fieldset>
+  {% endfor %}
+
+  <button type="submit">Log {{ meal }}</button>
+</form>
+
+<p class="muted" style="margin-top:1rem;">
+  If a food isn't in the nutrition library yet, that row will be written with <code>TBD</code> macros —
+  edit <code>food-log.md</code> later to add it to the library.
+</p>
+{% endblock %}

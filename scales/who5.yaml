@@ -1,0 +1,33 @@
+id: who5
+name: WHO-5
+full_name: WHO-5 Well-Being Index
+description: Subjective wellbeing (higher is better)
+prompt: "Please indicate for each of the five statements which is closest to how you have been feeling over the last 2 weeks."
+
+response_scale:
+  - value: 5
+    label: All of the time
+  - value: 4
+    label: Most of the time
+  - value: 3
+    label: More than half of the time
+  - value: 2
+    label: Less than half of the time
+  - value: 1
+    label: Some of the time
+  - value: 0
+    label: At no time
+
+items:
+  - I have felt cheerful and in good spirits
+  - I have felt calm and relaxed
+  - I have felt active and vigorous
+  - I woke up feeling fresh and rested
+  - My daily life has been filled with things that interest me
+
+scoring: sum_x4
+bands:
+  - [0, 28, Depression screen positive — follow up with PHQ-9]
+  - [29, 49, Poor wellbeing]
+  - [50, 74, Moderate wellbeing]
+  - [75, 100, Good wellbeing]

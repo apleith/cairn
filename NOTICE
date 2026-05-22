@@ -1,0 +1,17 @@
+Cairn
+Copyright 2026 Alex P. Leith
+
+This product includes software developed by Alex P. Leith
+(https://github.com/apleith/cairn).
+
+Licensed under the Apache License, Version 2.0 (the "License").
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Validated mental-health screening instruments (PHQ-9, GAD-7, WHO-5, ISI) are
+in the public domain or used here under their respective public-use
+authorizations. Cairn does not claim authorship of these instruments. See
+each YAML file under scales/ for the citation.
+
+THIS SOFTWARE IS NOT A MEDICAL DEVICE. See NOT_MEDICAL_ADVICE.md.

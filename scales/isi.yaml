@@ -1,0 +1,33 @@
+id: isi
+name: ISI
+full_name: Insomnia Severity Index
+description: Sleep problem severity over the last 2 weeks
+prompt: "Please rate the SEVERITY of your insomnia problem(s) over the last 2 weeks."
+
+response_scale:
+  - value: 0
+    label: None / Very satisfied / Not at all
+  - value: 1
+    label: Mild / Satisfied / A little
+  - value: 2
+    label: Moderate / Neither / Somewhat
+  - value: 3
+    label: Severe / Dissatisfied / Much
+  - value: 4
+    label: Very severe / Very dissatisfied / Very much
+
+items:
+  - Difficulty falling asleep
+  - Difficulty staying asleep
+  - Problems waking up too early
+  - How satisfied / dissatisfied are you with your current sleep pattern?
+  - How noticeable to others do you think your sleep problem is in terms of impairing the quality of your life?
+  - How worried / distressed are you about your current sleep problem?
+  - To what extent do you consider your sleep problem to interfere with your daily functioning currently?
+
+scoring: sum
+bands:
+  - [0, 7, No clinically significant insomnia]
+  - [8, 14, Subthreshold insomnia]
+  - [15, 21, Clinical insomnia — moderate]
+  - [22, 28, Clinical insomnia — severe]

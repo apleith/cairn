@@ -1,0 +1,81 @@
+# --- Cairn .gitignore ---
+# This repo is public. Anything that could identify a specific person, leak
+# health data, leak network topology, or leak secrets MUST stay out.
+
+# === Owner / instance configuration (PHI/PII boundary) ===
+# Real runtime values live in these files. Public users copy the .example
+# variants and fill in their own.
+config.yaml
+busy-blocks.yaml
+schedules.yaml
+.env
+.env.*
+
+# === Runtime state (PHI, network topology, secrets) ===
+STATUS.md
+.runtime.log
+*.log
+data.db
+data.db-journal
+data.db-wal
+data.db-shm
+*.sqlite
+*.sqlite-journal
+*.sqlite-wal
+*.sqlite-shm
+
+# === Secrets ===
+credentials.json
+token.json
+token.pickle
+client_secret*.json
+*.pem
+*.key
+*.pfx
+
+# === Owner narrative / planning docs ===
+# Working notes, plans, and specs that reference real schedules, real
+# measurements, or real people. Public design docs live in docs/public/.
+docs/plans/
+docs/specs/
+docs/private/
+
+# === Local archives of pre-public history ===
+.git.archive-*/
+*.backup
+*.bak
+
+# === Python ===
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+build/
+dist/
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.venv/
+venv/
+env/
+
+# === Capacitor / Android (companion app, kept out of this repo) ===
+node_modules/
+android/node_modules/
+android/android/app/build/
+android/android/.gradle/
+android/dist/
+*.apk
+*.aab
+
+# === Editor / OS ===
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+desktop.ini

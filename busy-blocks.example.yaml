@@ -1,0 +1,23 @@
+# Recurring busy blocks. Cairn's scheduler treats these times as
+# off-limits for non-critical prompts. Useful for standing meetings,
+# classes, or any recurring schedule that should suppress reminders.
+#
+# Copy this file to busy-blocks.yaml and fill in your own. busy-blocks.yaml
+# is gitignored.
+#
+# Each block has:
+#   day        — weekday name (Monday, Tuesday, ..., Sunday)
+#   start      — "HH:MM" 24h local
+#   end        — "HH:MM" 24h local
+#   note       — free-text label for your own reference
+
+blocks:
+  - day: Monday
+    start: "09:00"
+    end: "10:30"
+    note: "Example: weekly standup"
+
+  - day: Wednesday
+    start: "13:00"
+    end: "14:00"
+    note: "Example: standing meeting"

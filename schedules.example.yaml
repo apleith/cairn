@@ -1,0 +1,78 @@
+# Fixed-time daily reminders. The scheduler runs every 15 minutes and fires
+# each entry once per day when current time falls within a 15-minute window
+# after `time`.
+#
+# Copy this file to schedules.yaml and edit to fit your routine. Edits take
+# effect on the next scheduler tick (no restart needed).
+#
+# Fields:
+#   id           unique slug; also used as the per-day dedup key
+#   time         "HH:MM" 24h local
+#   title        ntfy notification title
+#   message      ntfy notification body
+#   critical     if true, bypasses quiet hours AND calendar/busy-blocks
+#                gating. Use sparingly — for medications, for example.
+#   days         list of weekday names; defaults to all 7
+#                e.g., [Monday, Wednesday, Friday]
+#   click_url    relative path; scheduler prepends app.public_url
+#                e.g., "/weight" becomes http://<host>:5151/weight
+#   tags         ntfy tag string for icons (see ntfy.sh docs)
+
+reminders:
+  # --- Morning ---
+  - id: meds_morning
+    time: "07:30"
+    critical: true
+    title: Morning medications
+    message: Take your morning medications with water.
+    tags: pill
+
+  - id: weigh_in
+    time: "07:45"
+    days: [Monday]
+    title: Weekly weigh-in
+    message: Step on the scale before breakfast.
+    click_url: /weight
+    tags: scales
+
+  - id: breakfast_log
+    time: "09:00"
+    title: Log breakfast
+    message: Tap to record what you ate.
+    click_url: /food-log/breakfast
+    tags: memo
+
+  # --- Midday ---
+  - id: hydrate_mid_morning
+    time: "10:30"
+    title: Refill water
+    message: Hydration checkpoint.
+    tags: droplet
+
+  - id: lunch_log
+    time: "13:30"
+    title: Log lunch
+    message: Tap to record what you ate.
+    click_url: /food-log/lunch
+    tags: memo
+
+  # --- Evening ---
+  - id: dinner_log
+    time: "19:00"
+    title: Log dinner
+    message: Tap to record what you ate.
+    click_url: /food-log/dinner
+    tags: memo
+
+  - id: meds_evening
+    time: "20:00"
+    critical: true
+    title: Evening medications
+    message: Take your evening medications.
+    tags: pill
+
+  - id: sleep_prep
+    time: "21:30"
+    title: Wind down
+    message: Skincare, teeth, lights low. Aim for bed.
+    tags: bed
