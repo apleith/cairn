@@ -378,6 +378,129 @@ def bp():
     return render_template("bp.html", today=date.today().isoformat())
 
 
+# ---- Body measurements (waist / hips / neck / upper arm / thigh) ----
+
+@app.route("/measurements", methods=["GET", "POST"])
+def measurements():
+    """Periodic tape-measure log. Any subset of fields may be filled."""
+    if request.method == "POST":
+        f = request.form
+
+        def _opt_float(key):
+            v = (f.get(key) or "").strip()
+            if not v:
+                return None
+            try:
+                return float(v)
+            except ValueError:
+                abort(400, f"{key} must be a number")
+
+        row = {
+            "date": (f.get("date") or date.today().isoformat()).strip(),
+            "waist_in": _opt_float("waist_in"),
+            "hips_in": _opt_float("hips_in"),
+            "neck_in": _opt_float("neck_in"),
+            "upper_arm_in": _opt_float("upper_arm_in"),
+            "thigh_in": _opt_float("thigh_in"),
+            "measurement_time": (f.get("measurement_time") or "").strip() or None,
+            "measurement_method": (f.get("measurement_method") or "").strip() or None,
+            "notes": (f.get("notes") or "").strip() or None,
+            "source": "manual_form",
+        }
+        if not any(row[k] is not None for k in
+                   ("waist_in", "hips_in", "neck_in", "upper_arm_in", "thigh_in")):
+            abort(400, "at least one measurement must be filled")
+        storage.save_body_measurement(row)
+        return redirect(url_for("submitted", kind="measurements"))
+    return render_template("measurements.html", today=date.today().isoformat())
+
+
+# ---- Medication events (start / dose_change / pause / restart / stop / refill) ----
+
+@app.route("/medications", methods=["GET", "POST"])
+def medications():
+    """Append-only ledger of medication events. The active dose for any
+    medication is the most recent non-stop event for that medication."""
+    if request.method == "POST":
+        f = request.form
+        name = (f.get("medication_name") or "").strip()
+        event_type = (f.get("event_type") or "").strip()
+        if not name:
+            abort(400, "medication_name required")
+        if not event_type:
+            abort(400, "event_type required")
+
+        dose = (f.get("dose") or "").strip() or None
+        dose_numeric = None
+        if dose:
+            import re as _re
+            m = _re.match(r"^\s*([\d.]+)", dose)
+            if m:
+                try:
+                    dose_numeric = float(m.group(1))
+                except ValueError:
+                    dose_numeric = None
+
+        row = {
+            "date": (f.get("date") or date.today().isoformat()).strip(),
+            "medication_name": name,
+            "generic_name": (f.get("generic_name") or "").strip() or None,
+            "dose": dose,
+            "dose_numeric": dose_numeric,
+            "dose_unit": (f.get("dose_unit") or "").strip() or None,
+            "route": (f.get("route") or "").strip() or None,
+            "frequency": (f.get("frequency") or "").strip() or None,
+            "event_type": event_type,
+            "reason": (f.get("reason") or "").strip() or None,
+            "prescribing_context": (f.get("prescribing_context") or "").strip() or None,
+            "notes": (f.get("notes") or "").strip() or None,
+            "source": "manual_form",
+        }
+        storage.save_medication_event(row)
+        return redirect(url_for("submitted", kind="medications"))
+    return render_template("medications.html", today=date.today().isoformat())
+
+
+# ---- Clinical events (surgery / follow-up / sleep study / academic markers) ----
+
+@app.route("/events", methods=["GET", "POST"])
+def events():
+    """Discrete clinical or life events that anchor the projection model."""
+    if request.method == "POST":
+        f = request.form
+        event_type = (f.get("event_type") or "").strip()
+        category = (f.get("category") or "").strip()
+        label = (f.get("label") or "").strip()
+        if not (event_type and category and label):
+            abort(400, "event_type, category, and label are required")
+
+        def _opt_float(key):
+            v = (f.get(key) or "").strip()
+            if not v:
+                return None
+            try:
+                return float(v)
+            except ValueError:
+                abort(400, f"{key} must be a number")
+
+        row = {
+            "date": (f.get("date") or date.today().isoformat()).strip(),
+            "event_type": event_type,
+            "category": category,
+            "label": label,
+            "certainty": (f.get("certainty") or "").strip() or None,
+            "ahi": _opt_float("ahi"),
+            "cpap_pressure": (f.get("cpap_pressure") or "").strip() or None,
+            "cpap_hours": _opt_float("cpap_hours"),
+            "mask_type": (f.get("mask_type") or "").strip() or None,
+            "notes": (f.get("notes") or "").strip() or None,
+            "source": "manual_form",
+        }
+        storage.save_clinical_event(row)
+        return redirect(url_for("submitted", kind="events"))
+    return render_template("events.html", today=date.today().isoformat())
+
+
 # ---- Scales ----
 
 @app.route("/scale/<scale_id>", methods=["GET", "POST"])

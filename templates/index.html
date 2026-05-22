@@ -29,6 +29,21 @@
 </section>
 
 <section>
+  <h2>Periodic log</h2>
+  <ul class="links">
+    <li><a href="{{ url_for('measurements') }}">Body measurements</a>
+      <span class="muted">waist, hips, neck, upper arm, thigh</span>
+    </li>
+    <li><a href="{{ url_for('medications') }}">Medication event</a>
+      <span class="muted">start / dose change / pause / restart / stop / refill</span>
+    </li>
+    <li><a href="{{ url_for('events') }}">Clinical event</a>
+      <span class="muted">surgery, follow-up, sleep study, milestones</span>
+    </li>
+  </ul>
+</section>
+
+<section>
   <h2>Mental health screens</h2>
   <p class="muted">Each screen reflects the past 2 weeks — retake on a 14-day cadence.</p>
   {% if any_screens_due %}

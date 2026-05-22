@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}Body measurements — Cairn{% endblock %}
+{% block content %}
+<h1>Body measurements</h1>
+<p class="muted">{{ today }}. Tape-measure log. Fill in whichever measurements you took.</p>
+
+<form method="post" autocomplete="off">
+  <label for="date">Date</label>
+  <input type="date" name="date" id="date" value="{{ today }}">
+
+  <fieldset>
+    <legend>Measurements (inches)</legend>
+    <div class="row3">
+      <div>
+        <label for="waist_in">Waist</label>
+        <input type="number" step="0.1" name="waist_in" id="waist_in" inputmode="decimal">
+      </div>
+      <div>
+        <label for="hips_in">Hips</label>
+        <input type="number" step="0.1" name="hips_in" id="hips_in" inputmode="decimal">
+      </div>
+      <div>
+        <label for="neck_in">Neck</label>
+        <input type="number" step="0.1" name="neck_in" id="neck_in" inputmode="decimal">
+      </div>
+    </div>
+    <div class="row3">
+      <div>
+        <label for="upper_arm_in">Upper arm</label>
+        <input type="number" step="0.1" name="upper_arm_in" id="upper_arm_in" inputmode="decimal">
+      </div>
+      <div>
+        <label for="thigh_in">Thigh</label>
+        <input type="number" step="0.1" name="thigh_in" id="thigh_in" inputmode="decimal">
+      </div>
+      <div></div>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Context (optional)</legend>
+    <label for="measurement_time">Time of day</label>
+    <select name="measurement_time" id="measurement_time">
+      <option value="">—</option>
+      <option value="morning">Morning</option>
+      <option value="evening">Evening</option>
+      <option value="other">Other</option>
+    </select>
+
+    <label for="measurement_method">Measured by</label>
+    <select name="measurement_method" id="measurement_method">
+      <option value="">—</option>
+      <option value="self_measure">Self</option>
+      <option value="partner">Partner</option>
+      <option value="clinician">Clinician</option>
+    </select>
+
+    <label for="notes">Notes</label>
+    <input type="text" name="notes" id="notes">
+  </fieldset>
+
+  <button type="submit">Save measurements</button>
+</form>
+{% endblock %}

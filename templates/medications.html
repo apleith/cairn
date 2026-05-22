@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% block title %}Medication event — Cairn{% endblock %}
+{% block content %}
+<h1>Medication event</h1>
+<p class="muted">{{ today }}. Append-only ledger. Log a start, dose change, pause, restart, stop, missed dose, or refill.</p>
+
+<form method="post" autocomplete="off">
+  <label for="date">Date</label>
+  <input type="date" name="date" id="date" value="{{ today }}">
+
+  <fieldset>
+    <legend>Medication</legend>
+    <label for="medication_name">Brand or display name</label>
+    <input type="text" name="medication_name" id="medication_name" required placeholder="e.g., Mounjaro">
+
+    <label for="generic_name">Generic name (optional)</label>
+    <input type="text" name="generic_name" id="generic_name" placeholder="e.g., tirzepatide">
+  </fieldset>
+
+  <fieldset>
+    <legend>Dose &amp; route (optional)</legend>
+    <div class="row3">
+      <div>
+        <label for="dose">Dose</label>
+        <input type="text" name="dose" id="dose" placeholder="e.g., 10 mg">
+      </div>
+      <div>
+        <label for="dose_unit">Unit</label>
+        <select name="dose_unit" id="dose_unit">
+          <option value="">—</option>
+          <option value="mg">mg</option>
+          <option value="mcg">mcg</option>
+          <option value="unit">unit</option>
+          <option value="mL">mL</option>
+        </select>
+      </div>
+      <div>
+        <label for="route">Route</label>
+        <select name="route" id="route">
+          <option value="">—</option>
+          <option value="injection">Injection</option>
+          <option value="oral">Oral</option>
+          <option value="topical">Topical</option>
+          <option value="inhaled">Inhaled</option>
+        </select>
+      </div>
+    </div>
+
+    <label for="frequency">Frequency</label>
+    <select name="frequency" id="frequency">
+      <option value="">—</option>
+      <option value="daily">Daily</option>
+      <option value="weekly">Weekly</option>
+      <option value="as_needed">As needed</option>
+      <option value="other">Other</option>
+    </select>
+  </fieldset>
+
+  <fieldset>
+    <legend>Event</legend>
+    <label for="event_type">Event type</label>
+    <select name="event_type" id="event_type" required>
+      <option value="">—</option>
+      <option value="start">Start</option>
+      <option value="dose_change">Dose change</option>
+      <option value="pause">Pause</option>
+      <option value="restart">Restart</option>
+      <option value="stop">Stop</option>
+      <option value="missed">Missed dose</option>
+      <option value="refill">Refill</option>
+    </select>
+
+    <label for="reason">Reason (optional)</label>
+    <select name="reason" id="reason">
+      <option value="">—</option>
+      <option value="titration">Titration</option>
+      <option value="shortage">Shortage</option>
+      <option value="side_effects">Side effects</option>
+      <option value="clinician_directive">Clinician directive</option>
+      <option value="cost">Cost</option>
+      <option value="other">Other</option>
+    </select>
+
+    <label for="prescribing_context">Prescribing context (optional)</label>
+    <select name="prescribing_context" id="prescribing_context">
+      <option value="">—</option>
+      <option value="weight_management">Weight management</option>
+      <option value="diabetes">Diabetes</option>
+      <option value="sleep_apnea">Sleep apnea</option>
+      <option value="mental_health">Mental health</option>
+      <option value="cardiovascular">Cardiovascular</option>
+      <option value="other">Other</option>
+    </select>
+  </fieldset>
+
+  <label for="notes">Notes</label>
+  <input type="text" name="notes" id="notes">
+
+  <button type="submit">Save event</button>
+</form>
+{% endblock %}

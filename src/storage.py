@@ -221,6 +221,37 @@ def save_submission(kind: str, data: dict, subkind: str = None, score: float = N
         return cur.lastrowid
 
 
+def _insert_fact(table: str, row: dict) -> int:
+    """Generic INSERT into one of the v1 fact tables. None values are dropped
+    so SQLite uses the column default where applicable."""
+    payload = {k: v for k, v in row.items() if v is not None}
+    cols = list(payload.keys())
+    placeholders = ", ".join("?" for _ in cols)
+    sql = f"INSERT INTO {table} ({', '.join(cols)}) VALUES ({placeholders})"
+    with connect() as conn:
+        cur = conn.execute(sql, [payload[c] for c in cols])
+        return cur.lastrowid
+
+
+def save_body_measurement(row: dict) -> int:
+    """Insert a row into body_measurements. `row` must include `date` and
+    `source`; any of waist_in/hips_in/neck_in/upper_arm_in/thigh_in may be
+    present. measurement_time and measurement_method are optional."""
+    return _insert_fact("body_measurements", row)
+
+
+def save_medication_event(row: dict) -> int:
+    """Insert a row into medication_events. `row` must include `date`,
+    `medication_name`, `event_type`, and `source`."""
+    return _insert_fact("medication_events", row)
+
+
+def save_clinical_event(row: dict) -> int:
+    """Insert a row into clinical_events. `row` must include `date`,
+    `event_type`, `category`, `label`, and `source`."""
+    return _insert_fact("clinical_events", row)
+
+
 def last_submission(kind: str, subkind: str = None) -> dict | None:
     with connect() as conn:
         if subkind:

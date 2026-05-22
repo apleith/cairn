@@ -28,10 +28,21 @@ expected.
   re-runs require `--force` and rewrite cleanly. Snapshots the database
   before writing and writes a row-count report to `data/`.
 
+- **Manual-entry routes for the three new fact tables.** `/measurements`
+  writes to `body_measurements` (waist, hips, neck, upper arm, thigh + time
+  of day + who measured). `/medications` writes to `medication_events` with
+  generic name, dose, route, frequency, event_type (start / dose_change /
+  pause / restart / stop / missed / refill), reason, and prescribing
+  context; the numeric dose is auto-parsed from the dose string for the
+  modeling layer. `/events` writes to `clinical_events` with category +
+  certainty + optional sleep-study / CPAP fields. All three are linked
+  from the home-page nav under a new "Periodic log" section.
+- Storage helpers `save_body_measurement`, `save_medication_event`, and
+  `save_clinical_event` in `src/storage.py` (a generic `_insert_fact`
+  helper drops None values so SQLite defaults apply).
+
 ### Planned for v0.2
 
-- Manual-entry routes and PWA forms for `body_measurements`,
-  `medication_events`, and `clinical_events`.
 - Segmented projection model with clinically plausible envelopes.
 - Replace the remaining hardcoded paths in `src/food_log_writer.py` and
   `templates/today.html` with configurable values.
