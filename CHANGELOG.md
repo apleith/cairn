@@ -19,11 +19,17 @@ expected.
   tables sit alongside the legacy tables; nothing is dropped or rewritten
   yet. Standard `alembic upgrade head` applies.
 - `alembic>=1.13` added to `requirements.txt`.
+- `scripts/migrate_v0_to_v1.py` backfills `daily_observations` from the
+  legacy `submissions` table. Migrates four `kind` values: `weight`,
+  `bp`, `daily_health`, and `wearable` summary rows. The other two
+  legacy kinds (`scale` mental-health responses and `reminder_fired`
+  operational dedup) are intentionally not migrated. Idempotent via the
+  `source='legacy_v0_*'` + `source_record_id=<submissions.id>` columns;
+  re-runs require `--force` and rewrite cleanly. Snapshots the database
+  before writing and writes a row-count report to `data/`.
 
 ### Planned for v0.2
 
-- `scripts/migrate_v0_to_v1.py` to backfill `daily_observations` from
-  the existing `submissions` table (weight, BP, daily-health entries).
 - Manual-entry routes and PWA forms for `body_measurements`,
   `medication_events`, and `clinical_events`.
 - Segmented projection model with clinically plausible envelopes.

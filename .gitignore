@@ -20,6 +20,8 @@ data.db-journal
 data.db-wal
 data.db-shm
 data.db.snapshot-*
+data/
+migration-report-*.txt
 *.sqlite
 *.sqlite-journal
 *.sqlite-wal
