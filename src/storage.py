@@ -198,6 +198,124 @@ CREATE TABLE IF NOT EXISTS hc_blood_pressure (
     synced_at TEXT NOT NULL
 );
 CREATE INDEX IF NOT EXISTS idx_hc_bp_time ON hc_blood_pressure(time);
+
+-- Cairn v1 fact tables (kept in sync with alembic/versions/2bd36a46271f).
+-- CREATE IF NOT EXISTS so fresh test databases get them without running
+-- the alembic upgrade. Production deploys still run alembic upgrade head.
+
+CREATE TABLE IF NOT EXISTS daily_observations (
+    id INTEGER PRIMARY KEY,
+    date DATE NOT NULL,
+    time TIME,
+    weight_lb REAL,
+    weight_observed BOOLEAN,
+    weight_source TEXT,
+    weight_context TEXT,
+    weight_confidence TEXT,
+    systolic INTEGER,
+    diastolic INTEGER,
+    pulse_from_bp_device INTEGER,
+    bp_posture TEXT,
+    resting_hr INTEGER,
+    average_hr INTEGER,
+    max_hr INTEGER,
+    steps INTEGER,
+    steps_observed BOOLEAN,
+    device_worn BOOLEAN,
+    active_minutes INTEGER,
+    distance_miles REAL,
+    exercise_minutes INTEGER,
+    resistance_training BOOLEAN,
+    protein_g REAL,
+    protein_logged BOOLEAN,
+    calories REAL,
+    carbs_g REAL,
+    fat_g REAL,
+    fluids_oz REAL,
+    sleep_hours REAL,
+    source TEXT NOT NULL,
+    import_timestamp DATETIME NOT NULL DEFAULT (datetime('now')),
+    source_file TEXT,
+    source_record_id TEXT,
+    timezone TEXT,
+    notes TEXT
+);
+CREATE INDEX IF NOT EXISTS idx_daily_observations_date ON daily_observations(date);
+CREATE INDEX IF NOT EXISTS idx_daily_observations_source ON daily_observations(source);
+
+CREATE TABLE IF NOT EXISTS body_measurements (
+    id INTEGER PRIMARY KEY,
+    date DATE NOT NULL,
+    waist_in REAL,
+    hips_in REAL,
+    neck_in REAL,
+    upper_arm_in REAL,
+    thigh_in REAL,
+    measurement_time TEXT,
+    measurement_method TEXT,
+    source TEXT NOT NULL,
+    import_timestamp DATETIME NOT NULL DEFAULT (datetime('now')),
+    notes TEXT
+);
+CREATE INDEX IF NOT EXISTS idx_body_measurements_date ON body_measurements(date);
+
+CREATE TABLE IF NOT EXISTS medication_events (
+    id INTEGER PRIMARY KEY,
+    date DATE NOT NULL,
+    medication_name TEXT NOT NULL,
+    generic_name TEXT,
+    dose TEXT,
+    dose_numeric REAL,
+    dose_unit TEXT,
+    route TEXT,
+    frequency TEXT,
+    event_type TEXT NOT NULL,
+    reason TEXT,
+    prescribing_context TEXT,
+    source TEXT NOT NULL,
+    import_timestamp DATETIME NOT NULL DEFAULT (datetime('now')),
+    notes TEXT
+);
+CREATE INDEX IF NOT EXISTS idx_medication_events_date ON medication_events(date);
+CREATE INDEX IF NOT EXISTS idx_medication_events_name ON medication_events(medication_name);
+
+CREATE TABLE IF NOT EXISTS clinical_events (
+    id INTEGER PRIMARY KEY,
+    event_id TEXT UNIQUE,
+    date DATE NOT NULL,
+    event_type TEXT NOT NULL,
+    category TEXT NOT NULL,
+    label TEXT NOT NULL,
+    certainty TEXT,
+    source TEXT NOT NULL,
+    ahi REAL,
+    cpap_pressure TEXT,
+    cpap_hours REAL,
+    mask_type TEXT,
+    notes TEXT
+);
+CREATE INDEX IF NOT EXISTS idx_clinical_events_date ON clinical_events(date);
+CREATE INDEX IF NOT EXISTS idx_clinical_events_category ON clinical_events(category);
+
+CREATE TABLE IF NOT EXISTS model_outputs (
+    id INTEGER PRIMARY KEY,
+    date DATE NOT NULL UNIQUE,
+    day INTEGER NOT NULL,
+    trend_weight_lb REAL,
+    trend_method TEXT,
+    expected_weight_lb REAL,
+    lower_plausible_weight_lb REAL,
+    upper_plausible_weight_lb REAL,
+    pct_twl REAL,
+    pct_ewl REAL,
+    bmi REAL,
+    phase TEXT,
+    segment_id TEXT,
+    model_version TEXT NOT NULL,
+    generated_at DATETIME NOT NULL DEFAULT (datetime('now')),
+    markers TEXT
+);
+CREATE INDEX IF NOT EXISTS idx_model_outputs_date ON model_outputs(date);
 """
 
 
@@ -231,6 +349,13 @@ def _insert_fact(table: str, row: dict) -> int:
     with connect() as conn:
         cur = conn.execute(sql, [payload[c] for c in cols])
         return cur.lastrowid
+
+
+def save_daily_observation(row: dict) -> int:
+    """Insert a row into daily_observations. `row` must include `date` and
+    `source`. Any subset of the measurement columns may be populated; None
+    values are dropped so SQLite uses column defaults where applicable."""
+    return _insert_fact("daily_observations", row)
 
 
 def save_body_measurement(row: dict) -> int:

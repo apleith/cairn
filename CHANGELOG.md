@@ -37,9 +37,30 @@ expected.
   modeling layer. `/events` writes to `clinical_events` with category +
   certainty + optional sleep-study / CPAP fields. All three are linked
   from the home-page nav under a new "Periodic log" section.
-- Storage helpers `save_body_measurement`, `save_medication_event`, and
-  `save_clinical_event` in `src/storage.py` (a generic `_insert_fact`
-  helper drops None values so SQLite defaults apply).
+- Storage helpers `save_body_measurement`, `save_medication_event`,
+  `save_clinical_event`, and `save_daily_observation` in
+  `src/storage.py` (a generic `_insert_fact` helper drops None values so
+  SQLite defaults apply).
+- **Mirror-write shim in `/weight`, `/bp`, and `/daily`.** Every POST to
+  those handlers now writes the legacy `submissions` blob row AND a
+  corresponding `daily_observations` row tagged
+  `source='manual_form'` + `source_record_id='sub:<id>'`. The mirror
+  closes the dual-write gap so the v1 schema receives every new entry
+  going forward; modeling code can read from `daily_observations` alone.
+  `/daily` translates its rich form (pill compliance, BM, edema, sleep
+  hours+minutes, SpO2) into the corresponding `daily_observations`
+  columns where they exist and into `notes` where they don't yet
+  (SpO2 column is planned for v0.2).
+- **`storage.SCHEMA` mirrors the Alembic v1 fact tables** with CREATE IF
+  NOT EXISTS so fresh test databases pick them up without running an
+  alembic upgrade. The Alembic revisions remain the authoritative source
+  of truth for production deploys.
+- **Test coverage for Phase 1 work** (`tests/test_v1_facts.py`,
+  `tests/test_migration_v0_to_v1.py`): 17 new tests covering the five
+  fact-table helpers, the four migration row-builders, the
+  empty-row filter, and an end-to-end run of the migration script
+  (dry-run, fresh apply, idempotency guard, --force re-run). Total
+  suite: 55 passing.
 
 ### Planned for v0.2
 

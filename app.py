@@ -95,7 +95,16 @@ def weight():
         except (KeyError, ValueError):
             abort(400, "weight must be a number")
         note = request.form.get("note", "").strip()
-        storage.save_submission("weight", {"weight_lb": value, "note": note})
+        sub_id = storage.save_submission("weight", {"weight_lb": value, "note": note})
+        storage.save_daily_observation({
+            "date": date.today().isoformat(),
+            "weight_lb": value,
+            "weight_observed": True,
+            "weight_source": "manual",
+            "notes": note or None,
+            "source": "manual_form",
+            "source_record_id": f"sub:{sub_id}",
+        })
         storage.upsert_health_log_field("Weight", str(value))
         if note:
             storage.upsert_health_log_field("Note", note)
@@ -153,8 +162,8 @@ def daily():
             if sleep_score:
                 sleep_wearable += f", score {sleep_score}/100"
 
-        # Persist raw fields to SQLite
-        storage.save_submission("daily_health", {
+        # Persist raw fields to SQLite (legacy submissions blob)
+        sub_id = storage.save_submission("daily_health", {
             "wake": wake, "breakfast": breakfast, "lunch": lunch, "bedtime": bedtime,
             "weight": weight, "bp": bp,
             "sleep_wearable": sleep_wearable,
@@ -162,6 +171,64 @@ def daily():
             "bm": bm, "edema": edema,
             "note": note,
         })
+
+        # Mirror-write into the v1 daily_observations fact table.
+        obs_row: dict = {
+            "date": date.today().isoformat(),
+            "source": "manual_form",
+            "source_record_id": f"sub:{sub_id}",
+        }
+        if weight:
+            try:
+                obs_row["weight_lb"] = float(weight)
+                obs_row["weight_observed"] = True
+                obs_row["weight_source"] = "manual"
+            except ValueError:
+                pass
+        if bp_sys and bp_dia:
+            try:
+                obs_row["systolic"] = int(bp_sys)
+                obs_row["diastolic"] = int(bp_dia)
+            except ValueError:
+                pass
+            if bp_pulse:
+                try:
+                    obs_row["pulse_from_bp_device"] = int(bp_pulse)
+                except ValueError:
+                    pass
+        if resting_hr:
+            try:
+                obs_row["resting_hr"] = int(resting_hr)
+            except ValueError:
+                pass
+        if steps_prev:
+            try:
+                obs_row["steps"] = int(steps_prev)
+                obs_row["steps_observed"] = True
+            except ValueError:
+                pass
+        if sleep_h or sleep_m:
+            try:
+                h = float(sleep_h) if sleep_h else 0.0
+                m = float(sleep_m) if sleep_m else 0.0
+                obs_row["sleep_hours"] = h + m / 60.0
+            except ValueError:
+                pass
+        # spo2_low has no dedicated column yet (planned for v0.2); fall through to notes.
+        notes_parts: list[str] = []
+        for label, v in (("wake", wake), ("breakfast", breakfast), ("lunch", lunch),
+                         ("bedtime", bedtime), ("bm", bm), ("edema", edema)):
+            if v:
+                notes_parts.append(f"{label}={v}")
+        if spo2_low:
+            notes_parts.append(f"spo2_low={spo2_low}")
+        if note:
+            notes_parts.append(note)
+        if notes_parts:
+            obs_row["notes"] = "; ".join(notes_parts)
+        # Only insert if at least one measurement or note field was populated
+        if set(obs_row.keys()) - {"date", "source", "source_record_id"}:
+            storage.save_daily_observation(obs_row)
 
         # Mirror to health-log.md, only writing fields that have a value
         writes = [
@@ -370,8 +437,16 @@ def bp():
         bp_value = f"{bp_sys}/{bp_dia}"
         if bp_pulse:
             bp_value += f", {bp_pulse} bpm"
-        storage.save_submission("bp", {
+        sub_id = storage.save_submission("bp", {
             "systolic": bp_sys, "diastolic": bp_dia, "pulse": bp_pulse,
+        })
+        storage.save_daily_observation({
+            "date": date.today().isoformat(),
+            "systolic": int(bp_sys),
+            "diastolic": int(bp_dia),
+            "pulse_from_bp_device": int(bp_pulse) if bp_pulse else None,
+            "source": "manual_form",
+            "source_record_id": f"sub:{sub_id}",
         })
         storage.upsert_health_log_field("BP", f"{bp_value} #cardio")
         return redirect(url_for("submitted", kind="bp"))
